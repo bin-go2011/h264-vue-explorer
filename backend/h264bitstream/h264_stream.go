@@ -3,7 +3,6 @@ package h264bitstream
 //#include "h264_stream.h"
 import "C"
 import (
-	"fmt"
 	"os"
 	"unsafe"
 )
@@ -37,11 +36,15 @@ func (s *Stream) Release() {
 func (s *Stream) ReadNalUnit() {
 	n, _ := s.file.Read(s.buf)
 	var nal_start, nal_end int
+
 	C.find_nal_unit(
 		(*C.uint8_t)(unsafe.Pointer(&s.buf[0])),
 		C.int(n),
 		(*C.int)(unsafe.Pointer(&nal_start)),
 		(*C.int)(unsafe.Pointer(&nal_end)),
 	)
-	fmt.Printf("nal_start=%d, nal_end=%d\n", nal_start, nal_end)
+	C.read_debug_nal_unit(s.handle,
+		(*C.uint8_t)(unsafe.Pointer(uintptr(unsafe.Pointer(&s.buf[0]))+uintptr(nal_start))),
+		C.int(nal_end-nal_start),
+	)
 }
