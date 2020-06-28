@@ -11,5 +11,6 @@ func TestFindNal(t *testing.T) {
 	}
 	defer stream.Release()
 
-	stream.ReadNalUnit()
+	stream.ReadNextNalUnit()
+	stream.ReadNextNalUnit()
 }
