@@ -1,7 +1,15 @@
 package h264bitstream
 
-import "testing"
+import (
+	"testing"
+)
 
-func TestNewStream(t *testing.T) {
-	NewStream()
+func TestFindNal(t *testing.T) {
+	stream, err := NewStream("samples/x264_test.264")
+	if err != nil {
+		panic(err)
+	}
+	defer stream.Release()
+
+	stream.ReadNalUnit()
 }
